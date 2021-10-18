@@ -20,7 +20,7 @@
 
 public class ClassVariablesSample 
 {
-//	Declare a static variable (also called class variable)
+//	Declare a class variable 
 	static String helloMessage;
 	
 	public static void main(String[] args) 
