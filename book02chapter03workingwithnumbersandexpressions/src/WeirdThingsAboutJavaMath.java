@@ -35,17 +35,33 @@ public class WeirdThingsAboutJavaMath
 		
 		/* 3. Division by zero */
 		
-//		System.out.println(1 / 0); // Error
-		System.out.println(1.0 / 0); // Infinity
-		
 		/*
 		 * What happens if you do attempt to divide a number by zero in a Java program?
 		 * The answer depends on whether you're dividing integers or floating-point numbers.
 		 * 
 		 * If you're dividing integers, the statement that attempts the division by zero
+		 * chokes up what is called exception, which is impolite way of crashing the program.
+		 * 
+		 * If you try to divide a floating-point type by zero, the results are not so abrupt.
+		 * Instead, Java assigns to the floating-point result one special value:
+		 * 
+		 * 		_ If you divide a number by zero, and the sign of both numbers is the same,
+		 * 			the result is positive infinity.
+		 * 
+		 * 		_ If you divide a number by zero, and the signs of the numbers are different,
+		 * 			the result is a negative infinity.
+		 * 
+		 * 		_ If you divide zero by zero, the result is not a number (NaN), regardless of
+		 * 			the signs.
 		 * 
 		 * */
 		
+//		Examples:
+		
+//		System.out.println(1 / 0); // Error
+//		System.out.println(1.0 / 0); // Infinity
+//		System.out.println(-1.0 / 0); // -Infinity
+//		System.out.println(0.0 / 0.0); // NaN
 	}
 
 }
