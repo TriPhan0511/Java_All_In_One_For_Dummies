@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>300</y>
+      <w>300</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>CustomerDB
+--
++connectionString: String
++connectionStatus: boolean
+--
++getCustomer(custno: int): Customer
++updateCustomer
++deleteCustomer
++addCustomer
++getCustomerList
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>300</y>
+      <w>180</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+ProductDB</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
