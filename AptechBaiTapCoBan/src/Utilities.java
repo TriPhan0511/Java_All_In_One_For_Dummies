@@ -1,8 +1,10 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Utilities 
+public final class Utilities 
 {
+	private Utilities() {}
+	
 	public static int getInteger(Scanner sc)
 	{
 		while (true)
