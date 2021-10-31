@@ -20,7 +20,7 @@
  * 
  *  */
 
-public class Ball
+public class Ball1
 {
 	public void hit()
 	{
@@ -28,7 +28,7 @@ public class Ball
 	}
 }
 
-class BaseBall extends Ball
+class BaseBall1 extends Ball1
 {
 	public void hit()
 	{
@@ -41,7 +41,7 @@ class BaseBallTest
 {
 	public static void main(String[] args)
 	{
-		BaseBall bb = new BaseBall();
+		BaseBall1 bb = new BaseBall1();
 		bb.hit();
 //		-> You tore the cover off!
 //		-> You hit me a mile!

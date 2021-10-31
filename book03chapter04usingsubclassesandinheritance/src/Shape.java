@@ -66,6 +66,16 @@
  * class has a method name showName that isn't defined by the Shape class. How can
  * you call it from a Shape variable? 
  * 
+ * Java lets you cast the Shape object to a Triangle and call the showName method
+ * in the same statement. All you need is an extra set of parentheses, like this:
+ * 
+ *  	Shape s = new Triangle();
+ *  	((Triangle) s).showName();
+ *  
+ *  Here the expression ((Triangle) s) returns the object referenced by the s variable,
+ *  cast as a Triangle. Then you can call any method of the Triangle class by using the
+ *  dot operator. (This operator throws a ClassCastException if s is not a Triangle object.)
+ * 
  * */
 
 
@@ -85,7 +95,13 @@ class Rectangle extends Shape
 	}
 }
 
-class Triangle extends Shape {}
+class Triangle extends Shape 
+{
+	public void showName() 
+	{
+		System.out.println("Hello from showName method.");
+	}
+}
 
 class Test
 {
@@ -110,6 +126,16 @@ class Test
 //		calcPerimeter((Rectangle) s); // error: s2 isn't a Rectangle
 		
 //		-----------------------------------------------------
+		
+//		Shape s = new Triangle();
+////		s.showName(); // error: won't compile
+//		((Triangle) s).showName();
+		
+//		Shape s = new Rectangle();
+//		((Triangle) s).showName(); // error: ClassCastException
+		
+//		Shape s = new Shape();
+//		((Triangle) s).showName(); // error: ClassCastException
 	}
 	
 //	A method that accepts a Shape object as a parameter
