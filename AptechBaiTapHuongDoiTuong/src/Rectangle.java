@@ -7,7 +7,7 @@ class Rectangle
 	private double length;
 	private double width;
 	
-//	Default constructor
+//	An empty constructor
 	public Rectangle() {}
 	
 //	Another constructor
