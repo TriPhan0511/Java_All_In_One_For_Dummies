@@ -1,71 +1,88 @@
-import java.util.Scanner;
+import java.util.*;
 
 /* Exercise 01: Calculate a rectangle's area and perimeter */
 
-// A class consists of a main method for testing.
 public class RetangleTest 
 {
 	private static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args)
 	{
-////		Way 1: 
-//		Rectangle rec = getRectangle();
-//		
-////		Print out this rectangle's area and perimeter
-//		System.out.printf("Area = %.2f", rec.calcArea());
-//		System.out.printf("\nPerimeter = %.2f", rec.calcPerimeter());
+		Rectangle rec = getRectangle("\nEnter width and length:");
+		displayRectangle(rec); // Print out this rectangle's information
 		
 //		--------------------------------------------------------------------------------------
 		
-//		Way 2:
-		Rectangle rec = getRectangle2();
-		
-//		Print out this rectangle's area and perimeter
-		System.out.printf("Area = %.2f", rec.calcArea());
-		System.out.printf("\nPerimeter = %.2f", rec.calcPerimeter());		
+////		Another way:
+//		Rectangle rec = getRectangle2("\nEnter width and length2:");
+//		displayRectangle(rec); // Print out this rectangle's information
+	}
+	
+//	displayRectangle method:
+	private static void displayRectangle(Rectangle rec)
+	{
+		System.out.println("\n--------- Rectangle's Information ---------");
+		System.out.printf("\nLength: %.2f\nWidth: %.2f\nArea: %.2f\nPerimeter: %.2f",
+							rec.getLength(),
+							rec.getWidth(),
+							rec.calcArea(),
+							rec.calcPerimeter());
 	}
 	
 //	getRectangle method:
-//	Use the constructor Rectangle() to instantiate an object of Rectangle class.
+//	Use the default constructor to instantiate an object of Rectangle class.
 //	Then use a Scanner object to get user's input.
-//	Finnaly, use two setter methods (setLength and setWidth) to set the data for the newly created Rectangle object. 
-	private static Rectangle getRectangle()
+//	Finnaly, use two setter methods (setLength and setWidth) to set the data 
+//	for the newly created Rectangle object. 
+	private static Rectangle getRectangle(String msg)
 	{
-//		Instantiates an object of Rectangle class 
-//		and assign the reference to that object to the rec variable.
+		System.out.println(msg);
 		Rectangle rec = new Rectangle();
 		
-//		Get length and width from user's input,
-//		then set length and width for the rectangle.
+//		Get length from user's input,
+//		then set it for the rectangle.
 		while (true)
 		{
 			try
 			{
-				System.out.print("Enter the length: ");
+				System.out.print("Length ? ");
 				rec.setLength(sc.nextDouble());
 				break;
 			}
+			catch(InputMismatchException e)
+			{
+				System.out.println("You should enter a number. Try again.");
+			}
 			catch(Exception e)
 			{
+				System.out.println("The length should be greater than 0. Try again.");
+			}
+			finally
+			{
 				sc.nextLine();
-				System.out.println("Invalid length. The length should be greater than 0.");
-				continue;
 			}
 		}
 		
+//		Get width from user's input,
+//		then set it for the rectangle.		
 		while (true)
 		{
 			try
 			{
-				System.out.print("Enter the width: ");
+				System.out.print("Width ? ");
 				rec.setWidth(sc.nextDouble());
 				break;
 			}
+			catch(InputMismatchException e)
+			{
+				System.out.println("You should enter a number. Try again.");
+			}
 			catch(Exception e)
 			{
+				System.out.println("The width should be greater than 0. Try again.");
+			}
+			finally 
+			{
 				sc.nextLine();
-				System.out.println("Invalid width. The width should be greater than 0.");
-				continue;
 			}
 		}	
 		return rec;
@@ -74,26 +91,32 @@ public class RetangleTest
 //	getRectangle2 method:
 //	Use a Scanner object to get length and width from user's input.
 //	Then use the constructor Rectangle(double length, double width) to instantiate an object of the Rectangle class.
-	private static Rectangle getRectangle2()
+	private static Rectangle getRectangle2(String msg)
 	{
 		Rectangle rec;
 		while (true)
 		{
 			try
 			{
-				System.out.print("Enter the length: ");
+				System.out.println(msg);
+				System.out.print("\nLength ? ");
 				double length = sc.nextDouble();
-				System.out.print("Enter the width: ");
+				System.out.print("Width ? ");
 				double width = sc.nextDouble();
 				rec = new Rectangle(length, width);
 				break;
 			}
+			catch(InputMismatchException e)
+			{
+				System.out.println("You should enter numbers for length and width. Try again.");
+			}
 			catch(Exception e)
 			{
+				System.out.println("The length and width should be greater than 0. Try again.");
+			}
+			finally 
+			{
 				sc.nextLine();
-				System.out.println("Invalid data.\n"
-						+ "Length and width should be numbers and are greater than 0.");
-				continue;
 			}
 		}
 		return rec;
