@@ -13,7 +13,7 @@ public class RetangleTest
 //		--------------------------------------------------------------------------------------
 		
 ////		Another way:
-//		Rectangle rec = getRectangle2("\nEnter width and length2:");
+//		Rectangle rec = getRectangle2("\nEnter width and length:");
 //		displayRectangle(rec); // Print out this rectangle's information
 	}
 	
