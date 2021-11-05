@@ -14,7 +14,7 @@ public class NhanVien extends CanBo
 	
 	public void setCongViec(String congViec)
 	{
-		this.congViec =setDefaultValue(congViec);
+		this.congViec =setString(congViec);
 	}
 	
 //	Override the setInfo method
@@ -28,37 +28,6 @@ public class NhanVien extends CanBo
 //	Override the toString method
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("Nhan Vien: \n");
-		builder.append(super.toString());
-		builder.append(",\n  cong viec: ");
-		builder.append(this.congViec);
-		builder.append(".");
-		
-		return builder.toString();
-	}
+		return "Nhan Vien: " + super.toString() + " " + this.congViec;
+	}	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

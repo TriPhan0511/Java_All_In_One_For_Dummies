@@ -14,7 +14,7 @@ public class KySu extends CanBo
 	
 	public void setNganhDaoTao(String nganhDaoTao)
 	{
-		this.nganhDaoTao = setDefaultValue(nganhDaoTao);
+		this.nganhDaoTao = setString(nganhDaoTao);
 	}
 	
 	
@@ -29,26 +29,6 @@ public class KySu extends CanBo
 //	Override the toString method
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("Ky Su: \n");
-		builder.append(super.toString());
-		builder.append(",\n  nganh dao tao: ");
-		builder.append(this.nganhDaoTao);
-		builder.append(".");
-		
-		return builder.toString();
+		return "Ky Su: " + super.toString() + " " + this.nganhDaoTao;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

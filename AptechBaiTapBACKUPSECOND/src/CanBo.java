@@ -14,20 +14,23 @@ public class CanBo
 //	Another constructor
 	public CanBo(String hoTen, int tuoi, String s, String diaChi)
 	{
+//		this.hoTen = setString(hoTen);
 		setHoTen(hoTen);
 		setTuoi(tuoi);
 		setGioiTinh(s);
+//		this.diaChi = setString(diaChi);
 		setDiaChi(diaChi);
 	}
 	
+//	Some setters
 	public void setHoTen(String hoTen)
 	{
-		this.hoTen = setDefaultValue(hoTen);
+		this.hoTen = setString(hoTen);
 	}
 	
 	public void setTuoi(int tuoi)
 	{
-//		Make sure the value of the "tuoi" field is always greater than or equal to 18
+//		Tu 18 tuoi tro len moi duoc lam can bo
 		if(tuoi < 18)
 		{
 			this.tuoi = 18;
@@ -56,13 +59,28 @@ public class CanBo
 	
 	public void setDiaChi(String diaChi)
 	{
-		this.diaChi = setDefaultValue(diaChi);
+		this.diaChi = setString(diaChi);
 	}
 	
 //	Getter
 	public String getHoTen()
 	{
 		return this.hoTen;
+	}
+	
+//	Override the toString method
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append(this.hoTen);
+		builder.append(" ");
+		builder.append(this.tuoi);
+		builder.append(" ");
+		builder.append(parseGioiTinh(this.gt));
+		builder.append(" ");
+		builder.append(diaChi);
+		
+		return builder.toString();
 	}
 	
 	private String parseGioiTinh(GioiTinh gt)
@@ -83,11 +101,12 @@ public class CanBo
 		return s;
 	}
 	
-	public String setDefaultValue(String s)
+	public String setString(String s)
 	{
+//		Neu string truyen vao bang null hoac rong thi tra ve gia tri la "Chua biet"
 		if(s == null || s.equals(""))
 		{
-			return "Not Known";
+			return "Chua biet";
 		}
 		return s;
 	}
@@ -96,7 +115,7 @@ public class CanBo
 	{
 //		Gets user input
 		String hoTen = Utilities.getString("Ho Ten: ", sc);
-		int tuoi = validateTuoi(sc);
+		int tuoi = Utilities.getInteger("Tuoi: ", sc);
 		String gioiTinh = Utilities.getString("Gioi tinh: ", sc);
 		String diaChi = Utilities.getString("Dia chi: ", sc);
 		
@@ -105,40 +124,6 @@ public class CanBo
 		setTuoi(tuoi);
 		setGioiTinh(gioiTinh);
 		setDiaChi(diaChi);
-	}
-	
-	private int validateTuoi(Scanner sc)
-	{
-		int tuoi;
-		while (true)
-		{
-			tuoi = Utilities.getInteger("Tuoi (be greater than or equal to 18): ", sc);
-			if (tuoi < 18)
-			{
-				System.out.println("You should enter a number which be greater than or "
-									+ "equal to 18. Try again.");
-			}
-			else
-			{ 
-				return tuoi;
-			}
-		}
-	}
-	
-//	Override the toString method
-	public String toString()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("  Ho ten: ");
-		builder.append(this.hoTen);
-		builder.append(", tuoi: ");
-		builder.append(this.tuoi);
-		builder.append(", \n  gioi tinh: ");
-		builder.append(parseGioiTinh(this.gt));
-		builder.append(", dia chi: ");
-		builder.append(diaChi);
-		
-		return builder.toString();
 	}
 }
 

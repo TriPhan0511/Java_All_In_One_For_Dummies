@@ -4,10 +4,7 @@ public class CongNhan extends CanBo
 {
 	private int bac;
 	
-	public CongNhan() 
-	{
-		super();
-	}
+	public CongNhan() {}
 	
 	public CongNhan(String hoTen, int tuoi, String s, String diaChi, int bac)
 	{
@@ -15,9 +12,9 @@ public class CongNhan extends CanBo
 		setBac(bac);
 	}
 	
-	public void setBac(int bac)
+	private void setBac(int bac)
 	{
-//		Bac nam trong khoang tu 1 de 10
+//		The value of the "bac" field must be between 1 and 10.
 		if (bac < 1)
 		{
 			this.bac = 1;
@@ -32,28 +29,44 @@ public class CongNhan extends CanBo
 		}
 	}
 	
-	public CanBo getCongNhan(Scanner sc) 
+//	Override the setInfo method
+	public void setInfo(Scanner sc)
 	{
-//		Lay thong tin tu user
-		System.out.print("Ho Ten ? ");
-		String hoTen = sc.nextLine();
-		System.out.print("Tuoi ? ");
-		int tuoi = sc.nextInt();
-		System.out.print("Gioi Tinh ? ");
-		String gioiTinh = sc.nextLine();
-		System.out.print("Dia Chi ? ");
-		String diaChi = sc.nextLine();
-		System.out.print("Bac ? ");
-		int bac = sc.nextInt();
-		
-		return new CongNhan(hoTen, tuoi, gioiTinh, diaChi, bac);
+		super.setInfo(sc);
+		int bac = validateBac(sc);
+		setBac(bac);
+	}
+	
+	private int validateBac(Scanner sc)
+	{
+		int bac;
+		while (true)
+		{
+			bac = Utilities.getInteger("Bac (between 1 and 10): ", sc);
+			if (bac < 1 || bac > 10)
+			{
+				System.out.println("You should enter a number between 1 and 10. Try again.");
+			}
+			else 
+			{
+				return bac;
+			}
+		}
 	}
 	
 //	Override the toString method
 	public String toString()
 	{
-		return "\nCong Nhan: " + super.toString() + " " + this.bac;
+		StringBuilder builder = new StringBuilder();
+		builder.append("Cong Nhan: \n");
+		builder.append(super.toString());
+		builder.append(",\n  bac: ");
+		builder.append(this.bac);
+		builder.append(".");
+		
+		return builder.toString();
 	}
+
 }
 
 
