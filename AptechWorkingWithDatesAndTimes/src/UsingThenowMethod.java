@@ -1,8 +1,8 @@
 import java.time.*;
 
-/* Using the now Method to Create a Date-Time Object */
+/* Using the static now Method to Create a Date-Time Object */
 
-public class TimeTester 
+public class UsingThenowMethod 
 {
 	public static void main(String[] args)
 	{

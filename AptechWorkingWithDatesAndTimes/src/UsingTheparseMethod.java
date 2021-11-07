@@ -8,7 +8,7 @@ import java.time.format.DateTimeParseException;
  * which creates a Date-Time object from a string that represents a specific date or time.
  * 
  * */
-public class TimeTester2 
+public class UsingTheparseMethod 
 {
 	public static void main(String[] args)
 	{
