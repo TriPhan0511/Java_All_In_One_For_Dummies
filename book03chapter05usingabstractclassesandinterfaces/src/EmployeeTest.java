@@ -1,92 +1,26 @@
-import java.text.NumberFormat;
 
 public class EmployeeTest 
 {
+	
 	public static void main(String[] args)
 	{
-		Employee emp = getEmployee(10000.0);
+//		Employee e1 = new SalariedEmployee("Alex", 10000.0);
+//		e1.displaySalary();
+////		-> Salary: $10,000.00
+//		
+//		Employee e2 = new HourlyEmployee("Brad", 1.5);
+//		e2.displaySalary();
+////		-> Hour rate: $1.50
 		
-		String msg = "";
-		if (emp instanceof SalariedEmployee)
+//		Employee e3 = new HourlyEmployee("Chris", 5.6);
+		Employee e3 = new SalariedEmployee("Chris", 5.6);
+		if (e3 instanceof HourlyEmployee)
 		{
-			msg = "The employee's salary is ";
-			msg += ((SalariedEmployee) emp).getFormattedSalary();
+			System.out.println(((HourlyEmployee) e3).sayAloha());
 		}
-		if (emp instanceof HourlyEmployee)
+		if (e3 instanceof SalariedEmployee)
 		{
-			msg = "The empployee's hourly rate is ";
-			msg += ((HourlyEmployee) emp).getFormattedRate();
+			System.out.println(((SalariedEmployee) e3).sayHello());
 		}
-		
-		System.out.println(msg);
-	}
-	
-	public static Employee getEmployee(double salary)
-	{
-//		return new SalariedEmployee(salary);
-		return new HourlyEmployee(salary);
 	}
 }
-
-class Employee 
-{
-	private double salary;
-	
-	public Employee(double salary)
-	{
-		this.salary = salary;
-	}
-	
-	public double getSalary()
-	{
-		return this.salary;
-	}
-}
-
-class SalariedEmployee extends Employee 
-{
-	public SalariedEmployee(double salary)
-	{
-		super(salary);
-	}
-	
-	public String getFormattedSalary()
-	{
-		NumberFormat cf = NumberFormat.getCurrencyInstance();
-		return cf.format(getSalary());
-	}
-}
-
-class HourlyEmployee extends Employee 
-{
-	public HourlyEmployee(double salary)
-	{
-		super(salary);
-	}
-	
-	public String getFormattedRate()
-	{
-		NumberFormat cf = NumberFormat.getCurrencyInstance();
-		return cf.format(getSalary());
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

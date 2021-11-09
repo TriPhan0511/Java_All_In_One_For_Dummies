@@ -1,9 +1,10 @@
 
 public class SoftBall extends Ball 
 {
-	public int hit(int batSpeed)
+	@Override
+	public int hit(int speed)
 	{
 		System.out.println("Hello from SoftBall.");
-		return 0;
+		return 2;
 	}
 }

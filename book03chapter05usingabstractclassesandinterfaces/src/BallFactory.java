@@ -1,37 +1,38 @@
 
-//public class BallFactory 
-//{
-//	public static Ball getBallInstance(String t)
-//	{
-//		if (t.equalsIgnoreCase("BaseBall"))
-//		{
-//			return new BaseBall();
-//		}
-//		if (t.equalsIgnoreCase("SoftBall"))
-//		{
-//			return new SoftBall();
-//		}
-//		return null;
-//	}
-//}
-
-
 public class BallFactory 
 {
-//	Create a enum field
-//	public enum BallType {BASEBALL, SOFTBALL}
-	public static enum BallType {BASEBALL, SOFTBALL}
-	
-	public static Ball getBallInstance(BallType t) 
+	public static Ball getBallInstance(BallType type)
 	{
-		if (t == BallType.BASEBALL)
+		switch (type)
 		{
+		case BASEBALL:
 			return new BaseBall();
-		}
-		if (t == BallType.SOFTBALL)
-		{
+		case SOFTBALL:
 			return new SoftBall();
+		default:
+			return null;
 		}
-		return null;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
