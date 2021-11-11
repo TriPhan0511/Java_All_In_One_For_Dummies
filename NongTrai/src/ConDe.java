@@ -2,9 +2,15 @@
 public class ConDe extends GiaSuc
 {
 //	A class variable
-	private static String tiengKeu = "dedede";
+	public static String tiengKeu = "dedede";
 	
-//	A constructor
+//	Default constructor
+	public ConDe() 
+	{
+		setTiengKeu(tiengKeu);
+	}
+	
+//	Another constructor
 	public ConDe(int slConCaiItNhat, int slConCaiNhieuNhat, 
 					double soLitSuaItNhat, double soLitSuaCaoNhat)
 	{

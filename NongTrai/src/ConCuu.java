@@ -2,9 +2,15 @@
 public class ConCuu extends GiaSuc
 {
 //	A class variable
-	private static String tiengKeu = "hehehe";
+	public static String tiengKeu = "hehehe";
 	
-//	A constructor
+//	Default constructor
+	public ConCuu() 
+	{
+		setTiengKeu(tiengKeu);
+	}
+	
+//	Another constructor
 	public ConCuu(int slConCaiItNhat, int slConCaiNhieuNhat, 
 					double soLitSuaItNhat, double soLitSuaCaoNhat)
 	{

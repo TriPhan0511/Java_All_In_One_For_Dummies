@@ -2,9 +2,15 @@
 public class ConBo extends GiaSuc 
 {
 //	A class variable
-	private static String tiengKeu = "booo";
+	public static String tiengKeu = "booo";
 	
-//	A constructor
+//	Default constructor
+	public ConBo() 
+	{
+		setTiengKeu(tiengKeu);
+	}
+	
+//	Another constructor
 	public ConBo(int slConCaiItNhat, int slConCaiNhieuNhat, 
 					double soLitSuaItNhat, double soLitSuaCaoNhat)
 	{
