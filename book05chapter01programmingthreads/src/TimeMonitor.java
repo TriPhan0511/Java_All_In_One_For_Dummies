@@ -1,0 +1,5 @@
+
+interface TimeMonitor 
+{
+	int getTime();
+}

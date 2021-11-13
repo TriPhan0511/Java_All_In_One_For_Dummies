@@ -17,6 +17,17 @@
  * Constructors and Methods of the Thread Class
  * 
  *	Constructor								Explanation
+ *
+ *	Thread()								Creates an instance of the Thread class. This constructor is
+ *											the basic Thread constructor without parameters.
+ *
+ *	Thread(String name)						Creates a Thread object and assigns the specified name to the thread.
+ *
+ *	Thread(Runnable target)					Turns any object that implements an API interface calles Runnable
+ *											into a thread.
+ *
+ *	Thread(Runnable target,					Creates a thread from any object that implements Runnable and
+ *			String name)					assigns the specified name to the thread.
  *	
  * 	static void sleep(int milliseconds)		Causes the current executing thread to sleep for a specified 
  * 											number of milliseconds.
@@ -38,22 +49,64 @@
  * to give other threads a chance to execute.
  */
 
+//public class CountDownClock extends Thread
+//{
+//	public void run()
+//	{
+//		for (int t = 20; t >= 0; t--)
+//		{
+//			System.out.println("T minus " + t);
+//			try
+//			{
+//				Thread.sleep(1000); // pause 1 second
+//			}
+//			catch (InterruptedException e) 
+//			{}
+//		}
+//	}
+//}
+
+//------------------------------------------------------------------------------------------------------------------
+
 public class CountDownClock extends Thread
+	implements TimeMonitor
 {
+	private int t;
+	
+	public CountDownClock(int start)
+	{
+		this.t = start;
+	}
+	
+	@Override
 	public void run()
 	{
-		for (int t = 20; t >= 0; t--)
+		for (; t >= 0; t--)
 		{
 			System.out.println("T minus " + t);
 			try
 			{
-				Thread.sleep(1000); // pause 1 second
+				Thread.sleep(1000);
 			}
-			catch (InterruptedException e) 
+			catch (InterruptedException e)
 			{}
 		}
 	}
+	
+	@Override
+	public int getTime()
+	{
+		return t;
+	}
 }
+
+
+
+
+
+
+
+
 
 
 
