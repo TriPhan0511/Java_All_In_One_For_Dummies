@@ -76,6 +76,8 @@
 
 //-----------------------------------------------------------------------------
 
+/* The LaunchEvent (Version 3) */
+
 public class LaunchEvent implements Runnable 
 {
 	private int start;
@@ -108,6 +110,14 @@ public class LaunchEvent implements Runnable
 			}
 		}
 	}
+	
+	/**
+	 * Note:
+	 * 
+	 * The while loop includes a call to Thread.sleep that sleeps for just
+	 * 10 milliseconds. Thus, this loop checks the countdown clock every
+	 * 10 milliseconds to see whether its time has arrived.
+	 */
 }
 
 

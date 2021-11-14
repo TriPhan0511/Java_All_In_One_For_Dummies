@@ -67,6 +67,8 @@
 
 import java.util.ArrayList;
 
+/* The CountDownApp (Version 3) */
+
 public class CountDownApp 
 {
 	public static void main(String[] args)
@@ -76,6 +78,7 @@ public class CountDownApp
 		events.add(new LaunchEvent(16, "Flood the pad!", clock));
 		events.add(new LaunchEvent(6, "Start the engines!", clock));
 		events.add(new LaunchEvent(0, "Liftoff!", clock));
+		
 		clock.start();
 		for (Runnable event : events)
 		{

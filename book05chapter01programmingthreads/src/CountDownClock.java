@@ -68,8 +68,10 @@
 
 //------------------------------------------------------------------------------------------------------------------
 
+/* The CountDownClock (Version 3) */
+
 public class CountDownClock extends Thread
-	implements TimeMonitor
+implements TimeMonitor
 {
 	private int t;
 	
