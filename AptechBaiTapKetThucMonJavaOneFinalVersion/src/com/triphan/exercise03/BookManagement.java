@@ -5,8 +5,13 @@ import java.time.*;
 import java.util.Scanner;
 import com.triphan.util.Console;
 
-import com.triphan.exercise03.dummydata.*;
-
+/**
+ * Exercise 03:
+ * 	A book management application.
+ * @version 1.0 2021-11-18
+ * @author Tri Phan
+ *
+ */
 public class BookManagement 
 {
 //	A BookManagement instance.
