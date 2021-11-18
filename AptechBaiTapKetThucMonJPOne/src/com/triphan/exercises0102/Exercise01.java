@@ -3,9 +3,10 @@ package com.triphan.exercises0102;
 import java.util.Scanner;
 import com.triphan.util.Console;
 
-/**
- * Exercise 01: Gets an integer from user input, 
- * informs it is a perfect number or not.
+/** Exercise 01:
+ *  Gets an integer from user input, 
+ *  informs it is a perfect number or not.
+ * @version 1.0 2021-11-16
  * @author Tri Phan
  */
 public class Exercise01 
@@ -51,23 +52,6 @@ public class Exercise01
 			return true;
 		}
 		return false;
-	}
-	
-	/**
-	 * Gets the perfect numbers between a range [low, high]
-	 */
-	private static void displayPerfectNumbers(int low, int high)
-	{
-		if (low <= high)
-		{
-			for (int i = low; i <= high; i++)
-			{
-				if (isPerfectNumber(i))
-				{
-					System.out.printf("%d ", i);
-				}
-			}
-		}
 	}
 }
 

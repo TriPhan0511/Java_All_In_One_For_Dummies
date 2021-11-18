@@ -2,10 +2,15 @@ package com.triphan.exercises0102;
 
 import java.util.*;
 
-/**
- * Exercise 02: Create an array of 10 integers.
+/** Exercise 02: 
+ * 	Create an array of ten random integers.
+ *  Display the content of the array.
+ *  Display the prime numbers which are contained in the array.
+ *  Display the contten of the array in reverse direction.
+ *  Sort the array in ascending order then display it.
+ * @version 1.0 2021-11-16
  * @author Tri Phan
- *
+ * 
  */
 public class Exercise02 
 {
@@ -16,20 +21,18 @@ public class Exercise02
 //		Creates an array which contains ten integers.
 		int[] numbers = e.getRandomNumbers(10);
 		
-////		Dummy data
-//		int[] numbers = {7, 5, 5, 6, 4, 8, 9, 10, 7};
-		
 //		Show the content of the array
 		System.out.println("\nThe array of integers:");
 		e.showNumbers(numbers);
 		
-//		Show all of prime numbers which ar contained in the array
-		
-		System.out.println("\n\nPrime numbers which are contained in the array:");
+//		Show all of prime numbers which are contained in the array
+		System.out.println("\n\nPrime numbers which "
+				+ "\nare contained in the array:");
 		e.showPrimeNumbers(numbers);
 		
 //		Show the content of an array in reverse direction
-		System.out.println("\n\nThe array of integers in reverse diretion:");
+		System.out.println("\n\nThe array of integers "
+				+ "\nin reverse diretion:");
 		e.showReversedNumbers(numbers);
 		
 //		Sort the array
