@@ -24,7 +24,7 @@ public class ScannerQuirk
 //		System.out.println("The string you entered: " + s);		
 		
 //		Test the getDouble method
-		double d = Utilities.getDouble("Enter a double: ", sc);
+		double d = Utilities_0.getDouble("Enter a double: ", sc);
 		System.out.println("The double you entered: " + d);
 	}
 }
