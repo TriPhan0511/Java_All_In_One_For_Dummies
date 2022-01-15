@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class ClickCounterExit extends Application
+public class ClickCounterExit_DIY extends Application
 {
   public static void main(String[] args)
   {
@@ -19,16 +19,16 @@ public class ClickCounterExit extends Application
   }
 
   Stage stage;
-  int iClickCount = 0;
+  int iClickCounter;
 
   @Override
   public void start(Stage primaryStage)
   {
     stage = primaryStage;
 
-//    Create the Click Me button
-    Button btnClickMe = new Button("Click me please!");
-    btnClickMe.setOnAction(e -> btnClickMe_Click());
+//    Create the Click button
+    Button btnClick = new Button("Click me please!");
+    btnClick.setOnAction(e -> btnClick_Click());
 
 //    Create the Close button
     Button btnClose = new Button("Close");
@@ -36,34 +36,34 @@ public class ClickCounterExit extends Application
 
 //    Add the buttons to a layout pane
     VBox pane = new VBox(10);
-    pane.getChildren().addAll(btnClickMe, btnClose);
+    pane.getChildren().addAll(btnClick, btnClose);
     pane.setAlignment(Pos.CENTER);
 
-//    Add the layout pane to the scene
+//    Add the layout pane to a scene
     Scene scene = new Scene(pane, 250, 150);
 
 //    Finish and show the stage
-    primaryStage.setScene(scene);
-    primaryStage.setTitle("Click Counter Exit");
     primaryStage.setOnCloseRequest(e ->
     {
       e.consume();
       btnClose_Click();
     });
+    primaryStage.setScene(scene);
+    primaryStage.setTitle("Click Counter Exit - DIY");
     primaryStage.show();
   }
 
-  private void btnClickMe_Click()
+  private void btnClick_Click()
   {
     Alert a = new Alert(Alert.AlertType.INFORMATION);
-    iClickCount++;
-    if (iClickCount == 1)
+    iClickCounter++;
+    if (iClickCounter == 1)
     {
-      a.setContentText("You have clicked once.");
+      a.setContentText("You have clicked once");
     }
     else
     {
-      a.setContentText("You have clicked " + iClickCount + " times.");
+      a.setContentText("You have clicked " + iClickCounter + " times.");
     }
     a.show();
   }
@@ -76,11 +76,17 @@ public class ClickCounterExit extends Application
     Optional<ButtonType> confirm = a.showAndWait();
     if (confirm.isPresent() && confirm.get() == ButtonType.YES)
     {
-      System.out.println("Testing: Close something...");
+      System.out.println("Testing: Close something, such as database connection...");
       stage.close();
     }
   }
 }
+
+
+
+
+
+
 
 
 
