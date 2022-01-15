@@ -10,6 +10,9 @@ module com.example.book06chapter01hellojavafx {
   exports com.lowewriter.addsubtract5;
   exports com.lowewriter.addsubtractall;
   exports com.lowewriter.test;
+  exports com.lowewriter.sceneswitcher;
+  exports com.lowewriter.clickcounteralert;
+  exports com.lowewriter.clickcounterexit;
 
 }
 
