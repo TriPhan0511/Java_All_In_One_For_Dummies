@@ -6,7 +6,11 @@ module com.example.book06chapter03settingthestageandscenelayout {
 //
 //  opens com.example.book06chapter03settingthestageandscenelayout to javafx.fxml;
 
-  exports com.lowewriter.hboxsample;
-  exports com.lowewriter.vboxsample;
+  exports com.lowewriter.hboxlayoutsample;
+  exports com.lowewriter.vboxlayoutsample;
+  exports com.lowewriter.flowpanelayoutsample;
+  exports com.lowewriter.borderpanelayoutsample;
+  exports com.lowewriter.gridpanelayoutsample;
+  exports com.lowewriter.samples;
 
 }
