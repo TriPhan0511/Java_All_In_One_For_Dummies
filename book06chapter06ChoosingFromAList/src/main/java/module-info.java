@@ -8,5 +8,6 @@ module com.example.book06chapter06choosingfromalist {
   exports com.lowewriter.UsingListViews.Samples;
   exports com.lowewriter.UsingListViews.EmployeeCRUDSample;
   exports com.lowewriter.UsingTreeViews;
+  exports com.lowewriter.PhamarcyApp;
 
 }
