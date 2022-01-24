@@ -8,9 +8,9 @@ public class Movie
 
   public Movie()
   {
-    this.title = "";
-    this.year = 0;
-    this.price = 0.0;
+    title = "";
+    year = 0;
+    price = 0.0;
   }
 
   public Movie(String title, int year, double price)
@@ -50,20 +50,3 @@ public class Movie
     this.price = price;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
