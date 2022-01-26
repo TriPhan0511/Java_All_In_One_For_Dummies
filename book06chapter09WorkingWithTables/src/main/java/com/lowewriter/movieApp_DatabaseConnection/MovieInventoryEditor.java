@@ -1,4 +1,4 @@
-package com.lowewriter.movieApp;
+package com.lowewriter.movieApp_DatabaseConnection;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
