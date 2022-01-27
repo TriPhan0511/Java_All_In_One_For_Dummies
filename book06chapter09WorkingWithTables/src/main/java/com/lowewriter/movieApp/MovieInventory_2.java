@@ -3,13 +3,17 @@ package com.lowewriter.movieApp;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -24,8 +28,10 @@ public class MovieInventory_2 extends Application
 
   //  Class fields for the primary scene
   Stage stage;
-  Scene primaryScene, addScene;
+  Scene primaryScene, addMovieScene;
   TableView<Movie> movieTableView;
+
+//  Class fields for the addMovieScene
   TextField titleTextField, yearTextField, priceTextField;
   Label titleErrorMessageLabel, yearErrorMessageLabel, priceErrorMessageLabel;
 
@@ -35,7 +41,7 @@ public class MovieInventory_2 extends Application
     stage = primaryStage;
 
 //    Create a heading label
-    Label headingLabel = new Label("Movie Inventory (1)");
+    Label headingLabel = new Label("Movie Inventory");
     headingLabel.setFont(Font.font("Arial", 20));
 
 //    Create a Title column
@@ -114,103 +120,127 @@ public class MovieInventory_2 extends Application
   //  Click event handler for the addButton
   private void addButton_Click()
   {
-    Label titleLabel = new Label("Title");
-    titleLabel.setMaxWidth(50);
+//    Create some controls, some panes and a new scene.
+//    Then set that scene to the stage
+
+//    Create the error message labels
+    titleErrorMessageLabel = new Label();
+    titleErrorMessageLabel.setTextFill(Color.RED);
+    yearErrorMessageLabel = new Label();
+    yearErrorMessageLabel.setTextFill(Color.RED);
+    priceErrorMessageLabel = new Label();
+    priceErrorMessageLabel.setTextFill(Color.RED);
+
+//    Create the title label and text field
+    Label titleLabel = new Label("Title:");
     titleTextField = new TextField();
-    titleTextField.setMinWidth(300);
-    HBox titlePane = new HBox(10, titleLabel, titleTextField);
-    titlePane.setPadding(new Insets(10));
-    titlePane.setAlignment(Pos.CENTER_LEFT);
+    titleTextField.setMinWidth(100);
+    titleTextField.setPrefWidth(400);
+    titleTextField.setMaxWidth(500);
+    titleTextField.setPromptText("Enter the movie title here");
 
-    Label yearLabel = new Label("Year");
-    yearLabel.setMaxWidth(50);
+//    Create the year label and text field
+    Label yearLabel = new Label("Year:");
     yearTextField = new TextField();
-    HBox yearPane = new HBox(10, yearLabel, yearTextField);
-    yearPane.setPadding(new Insets(10));
-    yearPane.setAlignment(Pos.CENTER_LEFT);
+    yearTextField.setMinWidth(50);
+    yearTextField.setPrefWidth(100);
+    yearTextField.setMaxWidth(150);
+    yearTextField.setPromptText("Enter the year here");
 
+//    Create the price label and text field
     Label priceLabel = new Label("Price");
-    priceLabel.setMaxWidth(50);
     priceTextField = new TextField();
-    HBox pricePane = new HBox(10, priceLabel, priceTextField);
-    pricePane.setPadding(new Insets(10));
-    pricePane.setAlignment(Pos.CENTER_LEFT);
+    priceTextField.setMinWidth(50);
+    priceTextField.setPrefWidth(100);
+    priceTextField.setMaxWidth(150);
+    priceTextField.setPromptText("Enter the price here");
 
+//    Create the button pane
     Button saveButton = new Button("Save");
-    saveButton.setMinWidth(75);
+    saveButton.setPrefWidth(80);
     saveButton.setOnAction(e -> saveButton_Click());
 
-    HBox buttonPane = new HBox(saveButton);
-    buttonPane.setPadding(new Insets(10));
-    buttonPane.setAlignment(Pos.CENTER_RIGHT);
+    HBox buttonPane = new HBox(10, saveButton);
+    buttonPane.setAlignment(Pos.BOTTOM_RIGHT);
 
-    VBox pane = new VBox(10, titlePane, yearPane, pricePane, buttonPane);
-    pane.setPadding(new Insets(10));
+//    Create the GridPane layout
+    GridPane grid = new GridPane();
+    grid.setPadding(new Insets(10));
+    grid.setHgap(10);
+    grid.setVgap(10);
 
-    addScene = new Scene(pane);
-    stage.setTitle("Add A New Movie");
-    stage.setScene(addScene);
+//    Add nodes to the pane
+    grid.add(titleErrorMessageLabel, 1, 0);
+    grid.addRow(1, titleLabel, titleTextField);
+    grid.add(yearErrorMessageLabel, 1, 2);
+    grid.addRow(3, yearLabel, yearTextField);
+    grid.add(priceErrorMessageLabel, 1, 4);
+    grid.addRow(5, priceLabel, priceTextField);
+    grid.add(buttonPane, 1, 6);
+
+//    Set alignments
+    GridPane.setHalignment(titleLabel, HPos.RIGHT);
+    GridPane.setHalignment(yearLabel, HPos.RIGHT);
+    GridPane.setHalignment(priceLabel, HPos.RIGHT);
+
+//    Set column widths
+    ColumnConstraints col1 = new ColumnConstraints();
+    col1.setPercentWidth(20);
+    ColumnConstraints col2 = new ColumnConstraints();
+    col2.setPercentWidth(80);
+    grid.getColumnConstraints().addAll(col1, col2);
+
+//    Create the addMovieScene
+    addMovieScene = new Scene(grid);
+
+//    Finish
+    stage.setScene(addMovieScene);
+    stage.setTitle("Adding A New Movie");
+    stage.show();
   }
 
-//  private void saveButton_Click()
-//  {
-//    Movie tempMovie = new Movie();
-//    tempMovie.setTitle(titleTextField.getText());
-//    tempMovie.setYear(Integer.parseInt(yearTextField.getText()));
-//    tempMovie.setPrice(Double.parseDouble(priceTextField.getText()));
-//    movieTableView.getItems().add(tempMovie);
-////      Clear all text fields
-//    titleTextField.clear();
-//    yearTextField.clear();
-//    priceTextField.clear();
-//    stage.setScene(primaryScene);
-//  }
-
-//  private void addButton_Click()
-//  {
-//    titleErrorMessageLabel.setText("");
-//    yearErrorMessageLabel.setText("");
-//    priceErrorMessageLabel.setText("");
-//    boolean valid = true;
-//    if (titleTextField.getText().trim().equals(""))
-//    {
-//      titleErrorMessageLabel.setText("Invalid title.");
-//      titleTextField.clear();
-//      valid = false;
-//    }
-//    try
-//    {
-//      Integer.parseInt(yearTextField.getText());
-//    }
-//    catch (NumberFormatException e)
-//    {
-//      yearErrorMessageLabel.setText("Invalid year.");
-//      yearTextField.clear();
-//      valid = false;
-//    }
-//    try
-//    {
-//      Double.parseDouble(priceTextField.getText());
-//    }
-//    catch (NumberFormatException e)
-//    {
-//      priceErrorMessageLabel.setText("Invalid price.");
-//      priceTextField.clear();
-//      valid = false;
-//    }
-//    if (valid)
-//    {
-//      Movie tempMovie = new Movie();
-//      tempMovie.setTitle(titleTextField.getText());
-//      tempMovie.setYear(Integer.parseInt(yearTextField.getText()));
-//      tempMovie.setPrice(Double.parseDouble(priceTextField.getText()));
-//      movieTableView.getItems().add(tempMovie);
-////      Clear all text fields
-//      titleTextField.clear();
-//      yearTextField.clear();
-//      priceTextField.clear();
-//    }
-//  }
+  private void saveButton_Click()
+  {
+    titleErrorMessageLabel.setText("");
+    yearErrorMessageLabel.setText("");
+    priceErrorMessageLabel.setText("");
+    boolean valid = true;
+    if (titleTextField.getText().trim().equals(""))
+    {
+      titleErrorMessageLabel.setText("Invalid title.");
+      titleTextField.clear();
+      valid = false;
+    }
+    try
+    {
+      Integer.parseInt(yearTextField.getText());
+    }
+    catch (NumberFormatException e)
+    {
+      yearErrorMessageLabel.setText("Invalid year.");
+      yearTextField.clear();
+      valid = false;
+    }
+    try
+    {
+      Double.parseDouble(priceTextField.getText());
+    }
+    catch (NumberFormatException e)
+    {
+      priceErrorMessageLabel.setText("Invalid price.");
+      priceTextField.clear();
+      valid = false;
+    }
+    if (valid)
+    {
+      Movie tempMovie = new Movie();
+      tempMovie.setTitle(titleTextField.getText());
+      tempMovie.setYear(Integer.parseInt(yearTextField.getText()));
+      tempMovie.setPrice(Double.parseDouble(priceTextField.getText()));
+      movieTableView.getItems().add(tempMovie);
+      stage.setScene(primaryScene);
+    }
+  }
 
   //  Dummy data : ObservableList
   private ObservableList<Movie> loadData()

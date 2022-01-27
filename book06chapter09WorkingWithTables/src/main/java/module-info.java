@@ -4,5 +4,6 @@ module com.example.book06chapter09workingwithtables {
   exports com.lowewriter.samples;
   exports com.lowewriter.movieApp_DatabaseConnection;
   exports com.lowewriter.movieApp;
+  exports com.lowewriter.movieApp_CRUD_Database;
 
 }

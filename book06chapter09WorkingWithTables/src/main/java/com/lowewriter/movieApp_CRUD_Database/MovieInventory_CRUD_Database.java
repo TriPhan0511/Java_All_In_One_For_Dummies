@@ -1,24 +1,27 @@
-package com.lowewriter.movieApp;
+package com.lowewriter.movieApp_CRUD_Database;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.IOException;
+import java.sql.*;
 import java.util.Optional;
 
-public class MovieInventory extends Application
+public class MovieInventory_CRUD_Database extends Application
 {
   public static void main(String[] args)
   {
@@ -26,17 +29,37 @@ public class MovieInventory extends Application
   }
 
   //  Class fields
+  Stage stage;
   TableView<Movie> table;
   TextField titleTextField;
   TextField yearTextField;
   TextField priceTextField;
 
+  DatabaseHandler dbHandler = new DatabaseHandler();
+
   @Override
   public void start(Stage primaryStage)
   {
+//    Set the reference for the class field named stage
+    stage = primaryStage;
+
 //    Create a heading label
-    Label headingLabel = new Label("Movie Inventory");
+    Label headingLabel = new Label("Movie Inventory (CRUD and Database)");
     headingLabel.setFont(Font.font("Arial", 20));
+
+//    Create a quit button
+    Button quitButton = new Button("Save & Quit");
+    quitButton.setMinWidth(60);
+    quitButton.setOnAction(e -> quitButton_Click());
+
+//    Create the spacer
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+//    Add the headingLabel, the spacer, and the quitButton to a HBox pane
+    HBox headingPane = new HBox(10, headingLabel, spacer, quitButton);
+    headingPane.setPadding(new Insets(10));
+    HBox.setMargin(quitButton, new Insets(0, 0, 0, 100));
 
 //    Create a Title column
     TableColumn<Movie, String> titleColumn = new TableColumn<>("Title");
@@ -93,16 +116,75 @@ public class MovieInventory extends Application
         priceTextField, addButton, deleteButton);
     hBox.setPadding(new Insets(10));
 
-//    Add the heading label, the table and the hBox pane to a VBox pane
-    VBox pane = new VBox(10, headingLabel, table, hBox);
+//    Add the heading pane, the table and the hBox pane to a VBox pane
+    VBox pane = new VBox(10, headingPane, table, hBox);
     pane.setPadding(new Insets(10));
 
 //    Finish
     Scene scene = new Scene(pane);
     primaryStage.setScene(scene);
     primaryStage.setTitle("Movie Inventory");
+    primaryStage.setOnCloseRequest(e -> {
+      e.consume();
+      quitButton_Click();
+    });
     primaryStage.show();
   }
+
+  private void saveData()
+  {
+    String query;
+    try (Connection conn = dbHandler.getConnection())
+    {
+      query = "DELETE FROM Movie";
+      try (Statement stat = conn.createStatement())
+      {
+        stat.executeUpdate(query);
+      }
+      query = "INSERT INTO Movie (Title, Year, Price) " +
+          "VALUES(?,?,?)";
+      for (Movie item : table.getItems())
+      {
+        try (PreparedStatement stat = conn.prepareStatement(query))
+        {
+          stat.setString(1, item.getTitle().trim());
+          stat.setInt(2, item.getYear());
+          stat.setDouble(3, item.getPrice());
+          stat.execute();
+        }
+      }
+    }
+    catch (SQLException e)
+    {
+      for (Throwable t : e)
+      {
+        t.printStackTrace();
+      }
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  //  Way 1: Delete all records from the table in the database.
+//  Then, iterate over the item collection list of the table, get data,
+//  and insert into the table in the database
+private void quitButton_Click()
+{
+  Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save the data?",
+      ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+  Optional<ButtonType> r = a.showAndWait();
+  if (r.get() == ButtonType.YES)
+  {
+    saveData();
+    stage.close();
+  }
+  if (r.get() == ButtonType.NO)
+  {
+    stage.close();
+  }
+}
 
   private void priceColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, Double> e)
   {
@@ -156,25 +238,41 @@ public class MovieInventory extends Application
     }
   }
 
-  //  Dummy data : ObservableList
-  private ObservableList<Movie> loadData()
+  private  ObservableList<Movie> loadData()
   {
-    ObservableList<Movie> movieObservableList =
-        FXCollections.observableArrayList();
-    movieObservableList.add(new Movie("The Shawshank Redemtion", 1994, 19.2));
-    movieObservableList.add(new Movie("Schinder's List", 1993, 18.9));
-    movieObservableList.add(new Movie("The Godfather", 1972, 19.1));
-    movieObservableList.add(new Movie("The Godfather: Part II", 1974, 19.0));
-    movieObservableList.add(new Movie("The Good, the Bad and the Ugly", 1966, 18.8));
-    movieObservableList.add(new Movie("The Lord of the Rings: The Fellowship of the Ring", 2001, 18.8));
-    movieObservableList.add(new Movie("The Dark Knight", 2008, 19.0));
-    movieObservableList.add(new Movie("12 Angry Men", 1957, 18.9));
-    movieObservableList.add(new Movie("The Lord of the Rings: The return of the King", 2003, 18.9));
-    movieObservableList.add(new Movie("Pulp Fiction", 1994, 18.8));
-    return movieObservableList;
-  }
+    ObservableList<Movie> data = FXCollections.observableArrayList();
+    Movie tempMovie;
 
+    try (Connection conn = dbHandler.getConnection())
+    {
+      String query = "SELECT Title, Year, Price FROM Movie";
+
+      try (Statement stat = conn.createStatement();
+           ResultSet result = stat.executeQuery(query))
+      {
+        while (result.next())
+        {
+          tempMovie = new Movie();
+          tempMovie.setTitle(result.getString("title").trim());
+          tempMovie.setYear(result.getInt("year"));
+          tempMovie.setPrice(result.getDouble("price"));
+          data.add(tempMovie);
+        }
+      }
+    } catch (SQLException e)
+    {
+      for (Throwable t : e)
+      {
+        t.printStackTrace();
+      }
+    } catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+    return data;
+  }
 }
+
 
 
 

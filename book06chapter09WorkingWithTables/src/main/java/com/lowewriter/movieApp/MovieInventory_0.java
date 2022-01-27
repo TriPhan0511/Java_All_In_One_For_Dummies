@@ -3,7 +3,6 @@ package com.lowewriter.movieApp;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,12 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.util.Optional;
 
-public class MovieInventory extends Application
+public class MovieInventory_0 extends Application
 {
   public static void main(String[] args)
   {
@@ -26,16 +23,14 @@ public class MovieInventory extends Application
   }
 
   //  Class fields
-  TableView<Movie> table;
-  TextField titleTextField;
-  TextField yearTextField;
-  TextField priceTextField;
+  TableView<Movie> movieTableView;
+  TextField titleTextField, yearTextField, priceTextField;
 
   @Override
   public void start(Stage primaryStage)
   {
 //    Create a heading label
-    Label headingLabel = new Label("Movie Inventory");
+    Label headingLabel = new Label("Movie Inventory (0)");
     headingLabel.setFont(Font.font("Arial", 20));
 
 //    Create a Title column
@@ -49,26 +44,24 @@ public class MovieInventory extends Application
 //    Create a Year column
     TableColumn<Movie, Integer> yearColumn = new TableColumn<>("Year");
     yearColumn.setMinWidth(100);
-    yearColumn.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("year"));
-    yearColumn.setCellFactory(TextFieldTableCell.forTableColumn(
-        new IntegerStringConverter()));
-    yearColumn.setOnEditCommit(e -> yearColumn_OnEditCommit(e));
+    yearColumn.setCellValueFactory(
+        new PropertyValueFactory<Movie, Integer>("year"));
 
-//    Create a Price Column
+//    Create a Price column
     TableColumn<Movie, Double> priceColumn = new TableColumn<>("Price");
     priceColumn.setMinWidth(100);
-    priceColumn.setCellValueFactory(new PropertyValueFactory<Movie, Double>("price"));
-    priceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-    priceColumn.setOnEditCommit(e -> priceColumn_OnEditCommit(e));
-    
-//    Create a TableView
-    table = new TableView<>();
-    table.setItems(loadData());
-    table.getColumns().addAll(titleColumn, yearColumn, priceColumn);
-    table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    table.setEditable(true);
+    priceColumn.setCellValueFactory(
+        new PropertyValueFactory<Movie, Double>("price"));
 
-//    Create text fields and button pane
+//    Create a table
+//    movieTableView = new TableView<>(loadData());
+    movieTableView = new TableView<>();
+    movieTableView.setItems(loadData());
+    movieTableView.getColumns().addAll(titleColumn, yearColumn, priceColumn);
+    movieTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    movieTableView.setEditable(true);
+
+//    Create a text fields and buttons pane
     titleTextField = new TextField();
     titleTextField.setPromptText("Title");
     titleTextField.setMinWidth(100);
@@ -82,38 +75,27 @@ public class MovieInventory extends Application
     priceTextField.setMaxWidth(100);
 
     Button addButton = new Button("Add");
-    addButton.setMinWidth(60);
+    addButton.setMinWidth(70);
     addButton.setOnAction(e -> addButton_Click());
 
     Button deleteButton = new Button("Delete");
     deleteButton.setMinWidth(60);
     deleteButton.setOnAction(e -> deleteButton_Click());
 
-    HBox hBox = new HBox(10, titleTextField, yearTextField,
-        priceTextField, addButton, deleteButton);
-    hBox.setPadding(new Insets(10));
+    HBox hBoxPane = new HBox(10, titleTextField,
+                        yearTextField, priceTextField,
+                        addButton, deleteButton);
+    hBoxPane.setPadding(new Insets(10));
 
-//    Add the heading label, the table and the hBox pane to a VBox pane
-    VBox pane = new VBox(10, headingLabel, table, hBox);
+//    Add the heading label, the table the hBoxPane to a VBox pane
+    VBox pane = new VBox(10, headingLabel, movieTableView, hBoxPane);
     pane.setPadding(new Insets(10));
 
 //    Finish
     Scene scene = new Scene(pane);
     primaryStage.setScene(scene);
-    primaryStage.setTitle("Movie Inventory");
+    primaryStage.setTitle("Movie Inventory Editor");
     primaryStage.show();
-  }
-
-  private void priceColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, Double> e)
-  {
-    Movie tempMovie = e.getRowValue();
-    tempMovie.setPrice(e.getNewValue());
-  }
-
-  private void yearColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, Integer> e)
-  {
-    Movie tempMovie = e.getRowValue();
-    tempMovie.setYear(e.getNewValue());
   }
 
   private void titleColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, String> e)
@@ -122,45 +104,41 @@ public class MovieInventory extends Application
     tempMovie.setTitle(e.getNewValue());
   }
 
+  //  Click event handler for the deleteButton
+  private void deleteButton_Click()
+  {
+    ObservableList<Movie> items, selectedItems;
+    items = movieTableView.getItems();
+    selectedItems = movieTableView.getSelectionModel().getSelectedItems();
+    String message = selectedItems.size() > 1 ?
+        "Are you sure you want to delete these items?" :
+        "Are you sure you want to delete this item?";
+    Alert a = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
+    Optional<ButtonType> r = a.showAndWait();
+    if (r.isPresent() && r.get() == ButtonType.YES)
+    {
+      items.removeAll(selectedItems);
+    }
+  }
+
+  //  Click event handler for the addButton
   private void addButton_Click()
   {
     Movie tempMovie = new Movie();
-    tempMovie.setTitle(titleTextField.getText().trim());
-    tempMovie.setYear(Integer.parseInt(yearTextField.getText().trim()));
-    tempMovie.setPrice(Double.parseDouble(priceTextField.getText().trim()));
-    table.getItems().add(tempMovie);
+    tempMovie.setTitle(titleTextField.getText());
+    tempMovie.setYear(Integer.parseInt(yearTextField.getText()));
+    tempMovie.setPrice(Double.parseDouble(priceTextField.getText()));
+    movieTableView.getItems().add(tempMovie);
     titleTextField.clear();
     yearTextField.clear();
     priceTextField.clear();
-  }
-
-  private void deleteButton_Click()
-  {
-    ObservableList<Movie> selectedItems = table.getSelectionModel().getSelectedItems();
-    if (selectedItems.size() == 0)
-    {
-      Alert a = new Alert(Alert.AlertType.INFORMATION, "Please choose one or some items will be deleted.");
-      a.showAndWait();
-    }
-    else
-    {
-      String message = selectedItems.size() > 1 ?
-          "Are you sure you want to delete these items?" :
-          "Are you sure you want to delete this item?";
-      Alert a = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
-      Optional<ButtonType> r = a.showAndWait();
-      if (r.isPresent() && r.get() == ButtonType.YES)
-      {
-        table.getItems().removeAll(selectedItems);
-      }
-    }
   }
 
   //  Dummy data : ObservableList
   private ObservableList<Movie> loadData()
   {
     ObservableList<Movie> movieObservableList =
-        FXCollections.observableArrayList();
+               FXCollections.observableArrayList();
     movieObservableList.add(new Movie("The Shawshank Redemtion", 1994, 19.2));
     movieObservableList.add(new Movie("Schinder's List", 1993, 18.9));
     movieObservableList.add(new Movie("The Godfather", 1972, 19.1));
@@ -173,11 +151,7 @@ public class MovieInventory extends Application
     movieObservableList.add(new Movie("Pulp Fiction", 1994, 18.8));
     return movieObservableList;
   }
-
 }
-
-
-
 
 
 
