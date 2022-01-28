@@ -1,6 +1,4 @@
-package com.lowewriter.movieApp_CRUD_Database;
-
-import com.lowewriter.movieApp_CRUD_Database_2.Movie;
+package com.lowewriter.movieApp_CRUD_Database_2;
 
 import java.io.IOException;
 import java.sql.*;

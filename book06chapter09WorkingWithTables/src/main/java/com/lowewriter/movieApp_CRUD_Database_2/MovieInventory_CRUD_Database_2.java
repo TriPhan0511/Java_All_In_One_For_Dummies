@@ -1,4 +1,4 @@
-package com.lowewriter.movieApp_CRUD_Database;
+package com.lowewriter.movieApp_CRUD_Database_2;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -19,6 +19,8 @@ import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MovieInventory_CRUD_Database_2 extends Application
@@ -34,8 +36,15 @@ public class MovieInventory_CRUD_Database_2 extends Application
   TextField titleTextField;
   TextField yearTextField;
   TextField priceTextField;
+  Button quitButton;
+  boolean edited = false;
 
+//  Create a DatabaseHandler instance for connecting to the database
   DatabaseHandler dbHandler = new DatabaseHandler();
+//  Create an array list to contain deleted Movie instances
+  List<Movie> inserted = new ArrayList<>();
+//  Create an array list to contain added or updated Movie instances
+  List<Movie> deleted = new ArrayList<>();
 
   @Override
   public void start(Stage primaryStage)
@@ -48,8 +57,10 @@ public class MovieInventory_CRUD_Database_2 extends Application
     headingLabel.setFont(Font.font("Arial", 20));
 
 //    Create a quit button
-    Button quitButton = new Button("Save & Quit");
+    quitButton = new Button("Save & Quit");
     quitButton.setMinWidth(60);
+//    quitButton.setVisible(false);
+    quitButton.setDisable(true);
     quitButton.setOnAction(e -> quitButton_Click());
 
 //    Create the spacer
@@ -131,25 +142,39 @@ public class MovieInventory_CRUD_Database_2 extends Application
     primaryStage.show();
   }
 
-  public void addMovie
-
   private void saveData()
   {
     String query;
     try (Connection conn = dbHandler.getConnection())
     {
-      query = "DELETE FROM Movie";
-      try (Statement stat = conn.createStatement())
-      {
-        stat.executeUpdate(query);
-      }
-      query = "INSERT INTO Movie (Title, Year, Price) " +
-          "VALUES(?,?,?)";
-      for (Movie item : table.getItems())
+//      Delete records
+      query = "DELETE FROM Movie WHERE Title = ?";
+      for (Movie item : deleted)
       {
         try (PreparedStatement stat = conn.prepareStatement(query))
         {
           stat.setString(1, item.getTitle().trim());
+          stat.execute();
+        }
+      }
+
+      for (Movie item : inserted)
+      {
+        try (PreparedStatement stat = conn.prepareStatement(query))
+        {
+          stat.setString(1, item.getTitle().trim());
+          stat.execute();
+        }
+      }
+
+//      Add new records to the Movie table in the database
+      query = "INSERT INTO Movie (Title, Year, Price) " +
+          "VALUES(?,?,?)";
+      for (Movie item : inserted)
+      {
+        try (PreparedStatement stat = conn.prepareStatement(query))
+        {
+          stat.setString(1, item.getTitle());
           stat.setInt(2, item.getYear());
           stat.setDouble(3, item.getPrice());
           stat.execute();
@@ -169,53 +194,137 @@ public class MovieInventory_CRUD_Database_2 extends Application
     }
   }
 
-  //  Way 1: Delete all records from the table in the database.
-//  Then, iterate over the item collection list of the table, get data,
-//  and insert into the table in the database
-private void quitButton_Click()
-{
-  Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save the data?",
-      ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-  Optional<ButtonType> r = a.showAndWait();
-  if (r.get() == ButtonType.YES)
+  private void quitButton_Click()
   {
-    saveData();
-    stage.close();
+    if (!edited)
+    {
+      stage.close();
+    }
+    else
+    {
+      Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save the data?",
+          ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+      Optional<ButtonType> r = a.showAndWait();
+      if (r.get() == ButtonType.YES)
+      {
+        saveData();
+        stage.close();
+      }
+      if (r.get() == ButtonType.NO)
+      {
+        stage.close();
+      }
+    }
   }
-  if (r.get() == ButtonType.NO)
-  {
-    stage.close();
-  }
-}
 
   private void priceColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, Double> e)
   {
+//    Process on the table's items collection
     Movie tempMovie = e.getRowValue();
     tempMovie.setPrice(e.getNewValue());
+//    Process on the deleted list
+    Movie tempMovie2 = MovieListHandler.getItem(deleted, tempMovie.getTitle());
+    if (tempMovie2 == null)
+    {
+      deleted.add(tempMovie);
+    }
+//    Process on the inserted list
+    Movie tempMovie3 = MovieListHandler.getItem(inserted, tempMovie.getTitle());
+    if (tempMovie3 != null)
+    {
+      inserted.remove(tempMovie3);
+    }
+    inserted.add(tempMovie);
+
+//    Notify the data changes, and set disable of the quitButton to false
+    edited = true;
+    quitButton.setDisable(false);
   }
 
   private void yearColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, Integer> e)
   {
+//    Process on the table's items collection
     Movie tempMovie = e.getRowValue();
     tempMovie.setYear(e.getNewValue());
+//    Process on the deleted list
+    Movie tempMovie2 = MovieListHandler.getItem(deleted, tempMovie.getTitle());
+    if (tempMovie2 == null)
+    {
+      deleted.add(tempMovie);
+    }
+//    Process on the inserted list
+    Movie tempMovie3 = MovieListHandler.getItem(inserted, tempMovie.getTitle());
+    if (tempMovie3 != null)
+    {
+//      MovieListHandler.removeItem(inserted, tempMovie3);
+      inserted.remove(tempMovie3);
+    }
+    inserted.add(tempMovie);
+
+//    Notify the data changes, and set disable of the quitButton to false
+    edited = true;
+    quitButton.setDisable(false);
   }
 
   private void titleColumn_OnEditCommit(TableColumn.CellEditEvent<Movie, String> e)
   {
+//    Get the Movie object for the row edited by the user
     Movie tempMovie = e.getRowValue();
+
+//    Process on the deleted list
+    Movie tempMovie2 = MovieListHandler.getItem(deleted, tempMovie.getTitle());
+    if (tempMovie2 == null)
+    {
+      tempMovie2 = new Movie();
+      tempMovie2.setTitle(tempMovie.getTitle());
+      deleted.add(tempMovie2);
+    }
+//    Process on the inserted list
+    Movie tempMovie3 = MovieListHandler.getItem(inserted, tempMovie.getTitle());
+    if (tempMovie3 != null)
+    {
+      inserted.remove(tempMovie3);
+    }
     tempMovie.setTitle(e.getNewValue());
+    inserted.add(tempMovie);
+
+//    Notify the data changes, and set disable of the quitButton to false
+    edited = true;
+    quitButton.setDisable(false);
   }
 
   private void addButton_Click()
   {
-    Movie tempMovie = new Movie();
-    tempMovie.setTitle(titleTextField.getText().trim());
-    tempMovie.setYear(Integer.parseInt(yearTextField.getText().trim()));
-    tempMovie.setPrice(Double.parseDouble(priceTextField.getText().trim()));
-    table.getItems().add(tempMovie);
-    titleTextField.clear();
-    yearTextField.clear();
-    priceTextField.clear();
+    String title = titleTextField.getText().trim();
+    int year = Integer.parseInt(yearTextField.getText().trim());
+    double price = Double.parseDouble(priceTextField.getText().trim());
+    if (MovieListHandler.search(table.getItems(), title) != -999)
+    {
+      Alert a = new Alert(Alert.AlertType.WARNING, "The movie " + title + " exists.");
+      a.showAndWait();
+      titleTextField.requestFocus();
+    }
+    else
+    {
+//      Create a Movie object from user input
+      Movie tempMovie = new Movie();
+      tempMovie.setTitle(title);
+      tempMovie.setYear(year);
+      tempMovie.setPrice(price);
+//      Add the Movie object to the table's items collection
+      table.getItems().add(tempMovie);
+//      Add the Movie object to the inserted list
+      inserted.add(tempMovie);
+//      Clear text fields and set focus to the title text field
+      titleTextField.clear();
+      yearTextField.clear();
+      priceTextField.clear();
+      titleTextField.requestFocus();
+
+//    Notify the data changes, and set disable of the quitButton to false
+      edited = true;
+      quitButton.setDisable(false);
+    }
   }
 
   private void deleteButton_Click()
@@ -235,7 +344,28 @@ private void quitButton_Click()
       Optional<ButtonType> r = a.showAndWait();
       if (r.isPresent() && r.get() == ButtonType.YES)
       {
+        selectedItems.forEach(item -> {
+//          Testing
+          System.out.println(item.getTitle());
+//          Process on the deleted list
+          Movie tempMovie2 = MovieListHandler.getItem(deleted, item.getTitle());
+          if (tempMovie2 == null)
+          {
+            deleted.add(item);
+          }
+//        Process on the temporary list
+          Movie tempMovie = MovieListHandler.getItem(inserted, item.getTitle());
+          if (tempMovie != null)
+          {
+            inserted.remove(tempMovie);
+          }
+        });
+//        Process on the table's items collection
         table.getItems().removeAll(selectedItems);
+
+//    Notify the data changes, and set disable of the quitButton to false
+        edited = true;
+        quitButton.setDisable(false);
       }
     }
   }
@@ -274,27 +404,6 @@ private void quitButton_Click()
     return data;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

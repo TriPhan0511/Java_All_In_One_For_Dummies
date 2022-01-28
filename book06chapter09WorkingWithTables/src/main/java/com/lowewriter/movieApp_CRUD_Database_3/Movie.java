@@ -1,4 +1,4 @@
-package com.lowewriter.movieApp_CRUD_Database;
+package com.lowewriter.movieApp_CRUD_Database_3;
 
 public class Movie
 {

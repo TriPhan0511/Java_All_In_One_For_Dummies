@@ -1,14 +1,14 @@
-package com.lowewriter.movieApp_CRUD_Database;
+package com.lowewriter.movieApp_CRUD_Database_2;
 
-import javafx.collections.ObservableList;
+import java.util.List;
 
-public class MovieTableItemsHandler
+public class MovieListHandler
 {
-  public int search(ObservableList<Movie> list, String title)
+  public static int search(List<Movie> list, String title)
   {
     for (int i = 0; i < list.size(); i++)
     {
-      if (list.get(i).getTitle().equals(title))
+      if (list.get(i).getTitle().equalsIgnoreCase(title))
       {
         return i;
       }
@@ -16,7 +16,7 @@ public class MovieTableItemsHandler
     return -999;
   }
 
-  public Movie getItem(ObservableList<Movie> list, String title)
+  public static Movie getItem(List<Movie> list, String title)
   {
     int index = search(list, title);
     if (index == -999)
@@ -26,7 +26,7 @@ public class MovieTableItemsHandler
     return list.get(index);
   }
 
-  public boolean addItem(ObservableList<Movie> list, Movie movie)
+  public static boolean addItem(List<Movie> list, Movie movie)
   {
     int index = search(list, movie.getTitle());
     if (index != -999)
@@ -37,7 +37,7 @@ public class MovieTableItemsHandler
     return true;
   }
 
-  public boolean removeItem(ObservableList<Movie> list, Movie movie)
+  public static boolean removeItem(List<Movie> list, Movie movie)
   {
     int index = search(list, movie.getTitle());
     if (index == -999)
